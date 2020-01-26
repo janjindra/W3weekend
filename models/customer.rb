@@ -4,12 +4,13 @@ require_relative('../db/sql_runner.rb')
 
 class Customer
 
-  attr_accessor :id, :name, :funds
+  attr_accessor :id, :name, :funds, :tickets_list
 
   def initialize(options)
     @id = options['id'].to_i if options['id']
     @name = options['name']
     @funds = options['funds'].to_f
+    @tickets_list = []
   end
 
 
@@ -44,5 +45,35 @@ class Customer
   values = [@id]
   SqlRunner.run(sql, values)
 end
+
+def show_all_films_for_one_customer()
+  sql = "SELECT * FROM films
+  INNER JOIN tickets on films.id = tickets.film_id
+  WHERE tickets.customer_id = $1"
+  values = [@id]
+  films_data = SqlRunner.run(sql, values)
+  return films_data.map{|film| Film.new(film)}
+end
+
+#Buying tickets should decrease the funds of the customer by the price
+def decrease_customer_funds_by_film_price(film)
+  @funds -= film.price
+end
+
+#Check how many tickets were bought by a customer
+##pry
+  def number_of_tickets_by_customer()
+  sql = "SELECT * from tickets
+  WHERE customer_id = $1"
+  values = [@id]
+  tickets_data = SqlRunner.run(sql, values)
+  return (tickets_data.map{|ticket| Ticket.new(ticket)}).count
+end
+##Ruby
+  def add_tickets_to_a_customer(ticket)
+    @tickets_list.push(ticket)
+end
+
+
 
 end

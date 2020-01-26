@@ -2,18 +2,19 @@ require_relative('../db/sql_runner')
 
 class Ticket
 
-attr_accessor :id, :customer_id, :film_id
+attr_accessor :id, :customer_id, :film_id, :screening_id
 
 
   def initialize(db_hash)
     @id = db_hash['id'].to_i if db_hash['id']
     @customer_id = db_hash['customer_id'].to_i
     @film_id = db_hash['film_id'].to_i
+    @screening_id = db_hash['screening_id'].to_i
   end
 
   def save()
-    sql = "INSERT INTO tickets (customer_id, film_id) VALUES ($1, $2) RETURNING *"
-    values = [@customer_id, @film_id]
+    sql = "INSERT INTO tickets (customer_id, film_id, screening_id) VALUES ($1, $2, $3) RETURNING *"
+    values = [@customer_id, @film_id, @screening_id]
     ticket = SqlRunner.run(sql, values)
     @id = ticket.first['id'].to_i
     end

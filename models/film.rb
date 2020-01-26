@@ -2,7 +2,7 @@ require_relative('../db/sql_runner')
 
 class Film
 
-attr_accessor :id, :title, :price
+  attr_accessor :id, :title, :price
 
   def initialize(db_hash)
     @id = db_hash['id'].to_i if db_hash['id']
@@ -16,7 +16,7 @@ attr_accessor :id, :title, :price
     values = [@title, @price]
     film = SqlRunner.run(sql, values)
     @id = film.first['id'].to_i
-    end
+  end
 
   def self.all()
     sql = "SELECT * FROM films"
@@ -38,9 +38,30 @@ attr_accessor :id, :title, :price
   end
 
   def delete()
-  sql = "DELETE FROM films where id = $1"
-  values = [@id]
-  SqlRunner.run(sql, values)
-end
+    sql = "DELETE FROM films where id = $1"
+    values = [@id]
+    SqlRunner.run(sql, values)
+  end
+
+  def show_all_customers_for_one_film
+    sql = "SELECT customers.* FROM customers
+    INNER JOIN tickets ON tickets.customer_id=customers.id
+    WHERE tickets.film_id= $1 "
+    values = [@id]
+    customer_data = SqlRunner.run(sql, values)
+    return customer_data.map{|customer| Customer.new(customer)}
+  end
+
+  #Check how many customers are going to watch a certain film
+  ##pry
+  def number_of_customers_by_film()
+    sql = "SELECT tickets.* FROM tickets
+    WHERE film_id = $1"
+    values = [@id]
+    tickets_data = SqlRunner.run(sql, values)
+    return (tickets_data.map{|ticket| Ticket.new(ticket)}).count
+    end
+
+
 
 end
