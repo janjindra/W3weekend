@@ -64,14 +64,15 @@ class Film
 
 #Write a method that finds out what is the most popular time (most tickets sold) for a given film
 def most_popular_time_for_a_given_film
-  sql = "SELECT screenings.show_time, count(distinct tickets.customer_id) FROM tickets
+  sql = "SELECT screenings.show_time FROM tickets
       INNER JOIN screenings ON screenings.id=tickets.screening_id
-      WHERE film_id = $1
+      WHERE tickets.film_id = $1
       GROUP BY screenings.show_time
-      ORDER BY count(distinct tickets.customer_id)"
+      ORDER BY count(distinct tickets.customer_id) desc"
   values = [@id]
-  result = SqlRunner.run(sql, values)
-  return result
+  result =  SqlRunner.run(sql, values)
+return result.map{|screening| Screening.new(screening)}.first.show_time
+
 end
 
 

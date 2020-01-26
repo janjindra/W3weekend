@@ -27,16 +27,16 @@ film2 = Film.new({'title' => "Paranormal Activity 2", 'price' => 3.50})
 film2.save()
 
 
-screening1 = Screening.new({'show_time' => "18:00", 'film_id' => film1.id})
+screening1 = Screening.new({'show_time' => "18:00", 'film_id' => film1.id, 'capacity' => 10})
 screening1.save()
 
-screening2 = Screening.new({'show_time' => "19:00", 'film_id' => film1.id})
+screening2 = Screening.new({'show_time' => "19:00", 'film_id' => film1.id, 'capacity' => 2})
 screening2.save()
 
-screening3 = Screening.new({'show_time' => "22:00", 'film_id' => film2.id})
+screening3 = Screening.new({'show_time' => "22:00", 'film_id' => film2.id, 'capacity' => 14})
 screening3.save()
 
-screening4 = Screening.new({'show_time' => "23:00", 'film_id' => film2.id})
+screening4 = Screening.new({'show_time' => "23:00", 'film_id' => film2.id, 'capacity' => 16})
 screening4.save()
 
 
@@ -52,7 +52,8 @@ ticket3.save()
 ticket4 = Ticket.new({'customer_id' => customer1.id, 'film_id' => film1.id, 'screening_id' => screening2.id})
 ticket4.save()
 
-
+ticket5 = Ticket.new({'customer_id' => customer1.id, 'film_id' => film1.id, 'screening_id' => screening2.id})
+ticket5.save()
 
 
 binding.pry

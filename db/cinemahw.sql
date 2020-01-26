@@ -20,8 +20,8 @@ price NUMERIC
 CREATE TABLE screenings (
   id SERIAL PRIMARY KEY,
   show_time VARCHAR(255),
-  film_id INT REFERENCES films(id) ON DELETE CASCADE
-  --film_name VARCHAR(255)
+  film_id INT REFERENCES films(id) ON DELETE CASCADE,
+  capacity INT
 );
 
 CREATE TABLE tickets (
